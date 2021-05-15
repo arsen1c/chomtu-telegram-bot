@@ -334,7 +334,7 @@ bot.command("help", (ctx) => {
             `/wiki- Wikipedia\n` +
             `/lyrics- Search for lyrics of a song (*English*)\n` + 
             `/saavn- Search for hindi song lyrics\n` +
-            `/fetch- Returns image results` 
+            `/fetch- Returns image results from Bing` 
     );
 });
 
