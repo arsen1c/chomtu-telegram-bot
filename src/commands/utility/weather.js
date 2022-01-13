@@ -61,6 +61,8 @@ const getWeather = async (cityName) => {
             [key]: detailsValues[i],
           }))
         );
+
+	console.log("Details: ", details); 
         return {
           success: true,
           url: baseURL,

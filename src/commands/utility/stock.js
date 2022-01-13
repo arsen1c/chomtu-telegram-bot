@@ -1,23 +1,30 @@
+import axios from 'axios';
 import { iterateHTML, fetchHTML } from '../../helpers';
 
 module.exports = {
   name: 'stock',
-  description: 'Get data about a specific stock',
+  description: 'Get data about a specific stock(India Only)',
   usage: '<stock-name>',
   args: true,
   chatAction: 'typing',
   async execute(ctx, stock) {
     try {
-      const baseURL = `https://portal.tradebrains.in/stock/${stock.join("")}/consolidated`;
+      const baseURL = `https://www.screener.in/company/${stock.join("")}/consolidated/`;
 
       const response = fetchHTML(baseURL);
 
       response.then(async(html) => {
-        let mainDesc = iterateHTML(html, ".stock-details-nums");
-        let oneDayReturn = iterateHTML(html, ".stock_item > small")[2];
-        let cons = iterateHTML(html , "div#cons > div > div > ul > li");
-        let pros = iterateHTML(html , "div#pros > div > div > ul > li > p");
-        let lowHigh = oneDayReturn.includes("-") ? true: false;
+        let stock = html("h1").text();
+        let propertyName = iterateHTML(html, "li > span.name");
+        let propertyValue = iterateHTML(html , "li > span > span.number");
+        let pros = iterateHTML(html , ".pros > ul > li");
+        let cons = iterateHTML(html , ".cons > ul > li");
+        const about = html(".sub.about > p").text();
+
+        const details = Object.assign(...propertyName.map((key, i) => {
+          if (i == 2) return {[key.trim()]: `${propertyValue[i]} / ${propertyValue[i+1]}`}
+          return {[key.trim()]: propertyValue[i > 2 ? i+1 : i]}
+        }));
 
         let prosData = "";
         let consData = "";
@@ -27,14 +34,43 @@ module.exports = {
 
 
         ctx.replyWithMarkdown(`\n`+
-          `📊 *${html(".stock_title_name").text().trim()} [${html(".stock_title_mcap").text().trim()}]*\n\n` +
-          `🏢 *${html(".stock-industry-category").text().trim()}*\n\n` +
-          `💵 *Current Price:* ${lowHigh ? "📉" : "📈"} ${mainDesc[2].trim()} ${oneDayReturn}\n*Market Cap:* ${mainDesc[0]}\n*PE (TTM):* ${mainDesc[1]}\n\n` +
+          `📊 *${stock}*\n\n` +
+          `*Market Cap:* ₹ ${details["Market Cap"]} Cr\n` +
+          `*Current Price:* ₹ ${details["Current Price"]}\n` +
+          `*High / Low:* ₹ ${details["High / Low"]}\n` +
+          `*Stock P/E:* ${details["Stock P/E"]}\n` +
+          `*Book Value:* ₹ ${details["Book Value"]}\n` +
+          `*Dividend Yield:* ${details["Dividend Yield"]} %\n` +
+          `*ROCE:* ${details["ROCE"]} %\n` +
+          `*ROE:* ${details["ROE"]} %\n` +
+          `*Face Value:* ₹ ${details["Face Value"]}\n\n` +
           `✅ *Pros:*${prosData}\n\n` +
-          `🚫 *Cons:*${consData}`
+          `🚫 *Cons:*${consData}\n\n` + 
+          `📖 *About*\n${about.trim()}`
         );
-      })
+      }).catch(e => {
+        const url = `https://www.screener.in/api/company/search/?q=${stock.join("+")}&v=2`;
+        let suggestions = "*Suggestions*\n\n";
+        
+        const data = axios.get(url);
+        data.then(res => {
+          let list = [...res.data];
+          list.forEach(company => {
+            // Match Allcaps words or text&text form
+            console.log(company.url);
+            suggestions += String(`*${company.url.match(/[A-Z].[A-Z]|[A-Z]+/g)[0]}* - ${company.name}\n\n`);
+          });
+
+          !list.length ? ctx.reply("Stock not found") : ctx.replyWithMarkdown(suggestions);
+        })
+          .catch(e => {
+            // ctx.reply(e.message);
+            ctx.reply("Stock not found");
+          })
+               
+      });
     } catch (e) {
+      console.log(e);
       ctx.reply(e.message);
     }
   },
