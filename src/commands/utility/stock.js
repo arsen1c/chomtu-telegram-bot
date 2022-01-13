@@ -58,7 +58,7 @@ module.exports = {
           list.forEach(company => {
             // Match Allcaps words or text&text form
             console.log(company.url);
-            suggestions += String(`*${company.url.match(/[A-Z].[A-Z]|[A-Z]+/g)[0]}* - ${company.name}\n\n`);
+            suggestions += String(`*${company.url.match(/[A-Z].+[A-Z]|[A-Z]+/g)[0]}* - ${company.name}\n\n`);
           });
 
           !list.length ? ctx.reply("Stock not found") : ctx.replyWithMarkdown(suggestions);
