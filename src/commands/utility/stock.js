@@ -47,7 +47,7 @@ module.exports = {
           `<b>ROCE:</b> ${details["ROCE"]} %\n` +
           `<b>ROE:</b> ${details["ROE"]} %\n` +
           `<b>Face Value:</b> ₹ ${details["Face Value"]}\n\n` +
-          (keyPoints.length && `📝 <b>Key Points:</b>${keypointsData}\n\n`) + 
+          (!keyPoints.length ? "" : `📝 <b>Key Points:</b>${keypointsData}\n\n`) + 
           `✅ <b>Pros:</b>${prosData}\n\n` +
           `🚫 <b>Cons:</b>${consData}\n\n` + 
           `📖 <b>About\n</b>${about.trim()}`;
