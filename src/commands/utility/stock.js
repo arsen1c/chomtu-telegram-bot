@@ -19,6 +19,7 @@ module.exports = {
         let propertyValue = iterateHTML(html , "li > span > span.number");
         let pros = iterateHTML(html , ".pros > ul > li");
         let cons = iterateHTML(html , ".cons > ul > li");
+        const keyPoints = iterateHTML(html, ".sub.commentary > p");
         const about = html(".sub.about > p").text();
 
         const details = Object.assign(...propertyName.map((key, i) => {
@@ -28,9 +29,11 @@ module.exports = {
 
         let prosData = "";
         let consData = "";
+        let keypointsData = "";
 
         pros.forEach(e => prosData += `\n\t\t- ${e.trim()}`);
         cons.forEach(e => consData += `\n\t\t- ${e.trim()}`);
+        keyPoints.forEach((e, i) => keypointsData += `\n\t\t${i+1}. ${e.trim()}`);
 
 
         let markdown = `\n`+
@@ -44,6 +47,7 @@ module.exports = {
           `<b>ROCE:</b> ${details["ROCE"]} %\n` +
           `<b>ROE:</b> ${details["ROE"]} %\n` +
           `<b>Face Value:</b> ₹ ${details["Face Value"]}\n\n` +
+          (keyPoints.length && `📝 <b>Key Points:</b>${keypointsData}\n\n`) + 
           `✅ <b>Pros:</b>${prosData}\n\n` +
           `🚫 <b>Cons:</b>${consData}\n\n` + 
           `📖 <b>About\n</b>${about.trim()}`;
