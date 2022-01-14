@@ -29,11 +29,11 @@ module.exports = {
 
         let prosData = "";
         let consData = "";
-        let keypointsData = "";
+        let keypointsData = "\n";
 
         pros.forEach(e => prosData += `\n\t\t- ${e.trim()}`);
         cons.forEach(e => consData += `\n\t\t- ${e.trim()}`);
-        keyPoints.forEach((e, i) => keypointsData += `\n\t\t${i+1}. ${e.trim()}`);
+        keyPoints.forEach((e, i) => keypointsData += `${e.trim()}\n\n`);
 
 
         let markdown = `\n`+
