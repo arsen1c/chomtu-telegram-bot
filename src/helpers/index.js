@@ -5,7 +5,6 @@ import { MAPBOX_KEY } from '../config';
 const iterateHTML = (result, attr) => {
   const arr = [];
   result(attr).each((i, element) => {
-    console.log(element);
     arr.push(result(element).text());
   });
   return arr;

@@ -9,7 +9,7 @@ module.exports = {
   chatAction: 'typing',
   async execute(ctx, stock) {
     try {
-      const baseURL = `https://www.screener.in/company/${stock.join("")}/consolidated/`;
+      const baseURL = `https://www.screener.in/company/${stock.join("")}/`;
 
       const response = fetchHTML(baseURL);
 
@@ -33,21 +33,28 @@ module.exports = {
         cons.forEach(e => consData += `\n\t\t- ${e.trim()}`);
 
 
-        ctx.replyWithMarkdown(`\n`+
-          `📊 *${stock}*\n\n` +
-          `*Market Cap:* ₹ ${details["Market Cap"]} Cr\n` +
-          `*Current Price:* ₹ ${details["Current Price"]}\n` +
-          `*High / Low:* ₹ ${details["High / Low"]}\n` +
-          `*Stock P/E:* ${details["Stock P/E"]}\n` +
-          `*Book Value:* ₹ ${details["Book Value"]}\n` +
-          `*Dividend Yield:* ${details["Dividend Yield"]} %\n` +
-          `*ROCE:* ${details["ROCE"]} %\n` +
-          `*ROE:* ${details["ROE"]} %\n` +
-          `*Face Value:* ₹ ${details["Face Value"]}\n\n` +
-          `✅ *Pros:*${prosData}\n\n` +
-          `🚫 *Cons:*${consData}\n\n` + 
-          `📖 *About*\n${about.trim()}`
-        );
+        let markdown = `\n`+
+          `📊 ${stock}\n\n` +
+          `<b>Market Cap:</b> ₹ ${details["Market Cap"]} Cr\n` +
+          `<b>Current Price:</b> ₹ ${details["Current Price"]}\n` +
+          `<b>High / Low:</b> ₹ ${details["High / Low"]}\n` +
+          `<b>Stock P/E:</b> ${details["Stock P/E"]}\n` +
+          `<b>Book Value:</b> ₹ ${details["Book Value"]}\n` +
+          `<b>Dividend Yield:</b> ${details["Dividend Yield"]} %\n` +
+          `<b>ROCE:</b> ${details["ROCE"]} %\n` +
+          `<b>ROE:</b> ${details["ROE"]} %\n` +
+          `<b>Face Value:</b> ₹ ${details["Face Value"]}\n\n` +
+          `✅ <b>Pros:</b>${prosData}\n\n` +
+          `🚫 <b>Cons:</b>${consData}\n\n` + 
+          `📖 <b>About\n</b>${about.trim()}`;
+
+          await ctx.telegram.sendMessage(ctx.chat.id, markdown, {
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [[{ text: "More on Screener.in", url: baseURL }]]
+            }
+          });
+
       }).catch(e => {
         const url = `https://www.screener.in/api/company/search/?q=${stock.join("+")}&v=2`;
         let suggestions = "*Suggestions*\n\n";
@@ -69,7 +76,7 @@ module.exports = {
                
       });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       ctx.reply(e.message);
     }
   },
