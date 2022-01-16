@@ -61,7 +61,7 @@ module.exports = {
 
       }).catch(e => {
         const url = `https://www.screener.in/api/company/search/?q=${stock.join("+")}&v=2`;
-        let suggestions = "*Suggestions*\n\n";
+        let suggestions = "*Did you mean...*\n\n";
         
         const data = axios.get(url);
         data.then(res => {
