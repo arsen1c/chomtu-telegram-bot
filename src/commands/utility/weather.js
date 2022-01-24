@@ -37,6 +37,9 @@ const getWeather = async (cityName) => {
         const currentWeather = result(
           '.CurrentConditions--phraseValue--2Z18W'
         ).text();
+        // Exapected temperature
+        const expectedTemperature = result('.CurrentConditions--tempHiLoValue--3SUHy').text();
+        let dayNight = expectedTemperature.match(/\d+/g).join("° / ");
         // Last updated
         const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
           .text()
@@ -69,7 +72,8 @@ const getWeather = async (cityName) => {
           markdown:
             `<b>${city}</b>\n\n` +
             `🌥 <b>Weather:</b> ${currentWeather}\n` +
-            `🌡 <b>Temperature:</b> ${temp}°\n\n` +
+            `🌡 <b>Temperature:</b> ${temp}°\n` +
+            `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
             `🌬 <b>Wind:</b> ${details.Wind.split('Wind Direction').join(
               ' '
             )}\n` +
