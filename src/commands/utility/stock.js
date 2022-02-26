@@ -37,7 +37,7 @@ module.exports = {
 
 
         let markdown = `\n`+
-          `📊 ${stock}\n\n` +
+          `📊<b> <u>Stock: ${stock}</u></b>\n\n` +
           `<b>Market Cap:</b> ₹ ${details["Market Cap"]} Cr\n` +
           `<b>Current Price:</b> ₹ ${details["Current Price"]}\n` +
           `<b>High / Low:</b> ₹ ${details["High / Low"]}\n` +
@@ -47,10 +47,10 @@ module.exports = {
           `<b>ROCE:</b> ${details["ROCE"]} %\n` +
           `<b>ROE:</b> ${details["ROE"]} %\n` +
           `<b>Face Value:</b> ₹ ${details["Face Value"]}\n\n` +
-          (!keyPoints.length ? "" : `📝 <b>Key Points:</b>${keypointsData}\n\n`) + 
-          `✅ <b>Pros:</b>${prosData}\n\n` +
-          `🚫 <b>Cons:</b>${consData}\n\n` + 
-          `📖 <b>About\n</b>${about.trim()}`;
+          `📖 <b><u>About</u>\n</b>${about.trim()}\n\n` +
+          (!keyPoints.length ? "" : `📝 <b><u>Key Points:</u></b>${keypointsData}`) + 
+          `✅ <b><u>Pros:</u></b>${prosData}\n\n` +
+          `🚫 <b><u>Cons:</u></b>${consData}\n\n`;
 
           await ctx.telegram.sendMessage(ctx.chat.id, markdown, {
             parse_mode: 'HTML',
