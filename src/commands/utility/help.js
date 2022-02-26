@@ -15,10 +15,11 @@ module.exports = {
         { reply_to_message_id: ctx.message.message_id }
       );
     } else if (!args.length) {
-      let command = 'Type /help <command_name> for more\n\n';
+      let command = 'Available Commands:\n';
       for (let [value, index] of commands) {
         command += `/${value}\n`;
       }
+	command += "\nType /help <command_name> for command details."
       ctx.reply(command);
     } else {
       ctx.reply('No command found');
