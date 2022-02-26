@@ -55,7 +55,7 @@ module.exports = {
           await ctx.telegram.sendMessage(ctx.chat.id, markdown, {
             parse_mode: 'HTML',
             reply_markup: {
-              inline_keyboard: [[{ text: "More on Screener.in", url: baseURL }]]
+              inline_keyboard: [[{ text: "Check balance sheet", url: baseURL }]]
             }
           });
 
