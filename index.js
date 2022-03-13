@@ -61,4 +61,4 @@ function startBot() {
   bot.launch();
 }
 
-app.listen(3000, startBot());
+app.listen(process.env.PORT || 3000, startBot());
