@@ -1,5 +1,28 @@
 import { fetchHTML, iterateHTML, getCityCords } from '../../helpers';
 
+const getCurrentWeatherEmoji = (remark) => {
+  console.log("Remark:", remark)
+  const options = {
+    "Mostly Cloudy": ["⛅️", "☁️"],
+    "Partly Cloudy": ["⛅️", "☁️"],
+    "Clear": ["☀️", "🌕"],
+    "Sunny": ["🌞", "🌞"],
+    "Mostly Clear": ["🌤", "🌗"],
+    "Fog": ["🌫️", "🌫"],
+    "Showers in the Vicinity": ["☔️", "☔️"],
+    "Rain Shower": ["🌦", "☔️"],
+    "Light Rain Shower/Wind": ["🌦", "☔️"],
+    "Smoke": ["💨", "💨"],
+    "Fair": ["🌤", "🌖"],
+    "Heavy Rain/Wind": ["🌧", "🌧"],
+    "Heavy Thunderstorm/Wind": ["⛈", "⛈"],
+    "Light Rain with Thunder": ["🌧", "🌧"],
+    "Thunder": ["🌩", "🌩"]
+  }
+  if (options[remark]) return options[remark];
+  return ["🌥", "🌥"];
+}
+
 const getAQIRemark = (aqi) => {
   let remark;
 
@@ -45,6 +68,8 @@ const getWeather = async (cityName) => {
           .text()
           .split('As of')
           .join('');
+        const hour = Number(lastUpdated.match(/[0-9]+/g)[0]);
+        console.log("hour:", hour < 5 && hour > 19)
         // Other details labels
         const detailsLabels = iterateHTML(
           result,
@@ -65,13 +90,13 @@ const getWeather = async (cityName) => {
           }))
         );
 
-	console.log("Details: ", details); 
+	     // console.log("Details: ", details); 
         return {
           success: true,
           url: baseURL,
           markdown:
             `<b>${city}</b>\n\n` +
-            `🌥 <b>Weather:</b> ${currentWeather}\n` +
+            `${(hour < 5 || hour > 19) ? getCurrentWeatherEmoji(currentWeather)[1] : getCurrentWeatherEmoji(currentWeather)[0]} <b>Weather:</b> ${currentWeather}\n` +
             `🌡 <b>Temperature:</b> ${temp}°\n` +
             `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
             `🌬 <b>Wind:</b> ${details.Wind.split('Wind Direction').join(
@@ -86,7 +111,7 @@ const getWeather = async (cityName) => {
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
-        // console.log(err.message);
+        console.log(err);
         return {
           success: false,
           message: 'City not found',
