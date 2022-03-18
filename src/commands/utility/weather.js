@@ -18,7 +18,9 @@ const getCurrentWeatherEmoji = (remark) => {
     "Heavy Thunderstorm/Wind": ["⛈", "⛈"],
     "Light Rain with Thunder": ["🌧", "🌧"],
     "Thunder": ["🌩", "🌩"],
-    "Rain": ["🌧", "🌧"]
+    "Rain": ["🌧", "🌧"],
+    "Rain and Snow": ["❄️", "❄️"],
+    "Snow": ["❄️", "❄️"]
   }
   if (options[remark]) return options[remark];
   return ["🌥", "🌥"];
