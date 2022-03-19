@@ -39,63 +39,51 @@ const lyreka = async (songName) => {
     });
 };
 
-// [+] From Saavn [+]
-const getSongDetails = (song) => {
-  const data = axios.get(`https://saavn.me/search?song=${song}`);
+/**
+  Following step is harmful, check more here: https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature/20100521#20100521
+*/
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
-  return (
-    data
-      .then((res) => {
-        const songInfo = res.data[0];
+// [+] From Gaana.com [+]
+const getSuggestions = async (lyrics) => {
+  const URL =  `https://gsearch-prod-cloud.gaana.com/gaanasearch-api/mobilesuggest/autosuggest-lite-vltr-ro?geoLocation=IN&query=${lyrics}&content_filter=2&include=allItems&isRegSrch=0&webVersion=mix&rType=web&usrLang=Hindi,English,Punjabi`
+  let suggestions = `Didn't find the song, but I have some suggestions for ya.\nType: /gaana (song_suggestion)\n\n`;
 
-        if (!res.data[0] > 0) {
-          return { success: true, message: 'No song found' };
-        }
+  try {
+    const {data} = await axios.get(URL);
 
-        return {
-          success: true,
-          songId: songInfo.song_id,
-          songName: songInfo.song_name,
-          albumName: songInfo.album_name,
-          year: songInfo.year,
-          hasLyrics: songInfo.song_has_lyrics,
-        };
-      })
-      // eslint-disable-next-line no-console
-      .catch((err) => console.log(err.message))
-  );
-};
+    // console.log(JSON.stringify(data, null, 2))
+    data.gr[0].gd.forEach(song => {
+      suggestions += `<b>${song.ti} (${song.sti})</b>\n/gaana ${song.seo.split("-").join(" ")}\n\n`
+    })
+    
+    return suggestions
 
-const saavn = async (song) => {
-  const songDetails = await getSongDetails(song);
-  // eslint-disable-next-line no-console
-
-  if (songDetails.status === 'fail') {
-    return { markdown: songDetails.message };
+  } catch (error) {
+    console.log(error);
+    return `Error: ${error.message}`
   }
+}
 
-  if (!songDetails.hasLyrics) {
-    return { markdown: 'Lyrics are not available for this song 😔' };
-  }
+const gaana = async (song) => {
+  const URL = `https://gaana.com/lyrics/`
+  const data = fetchHTML(URL + "" + song.join("-"))
 
-  const data = axios.get(
-    `https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&ctx=web6dot0&_format=json&_marker=0?_marker=0&lyrics_id=${songDetails.songId}`
-  );
-  return data
-    .then((res) => ({
-      success: true,
-      markdown:
-        `🎶 *${songDetails.songName}*\n` +
-        `Album: *${songDetails.albumName}*\n` +
-        `Year: *${songDetails.year}*\n\n` +
-        `${res.data.lyrics.replace(/<br\s*\/?>/gm, '\n')}`,
-    }))
-    .catch((err) => {
-      return { markdown: 'Error occured' };
-    });
+  return data.then(async(html) => {
+    let body = ``;
+    let lyrics = html(".lyr_data > ._inner > p").text();
+    let album = html("p.al_name > a").text();
+    let year = html("p.al_name").text().match(/[0-9]+/g);
+    let artists = html("ul.singers").text();
+
+    body += `<b>Album:</b> ${album} - ${year}\n<b>Artist[s]</b>: ${artists}\n\n<b>Lyrics:</b>\n\n${lyrics}`
+    return { markdown: body }
+  }).catch (async (error) => {
+      return {markdown: await getSuggestions(song.join("%20"))}
+  })
 };
 
 export default {
   lyreka,
-  saavn,
+  gaana,
 };
