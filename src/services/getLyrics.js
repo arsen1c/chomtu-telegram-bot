@@ -73,7 +73,7 @@ const gaana = async (song) => {
     let body = ``;
     let lyrics = html(".lyr_data > ._inner > p").text();
     let album = html("p.al_name > a").text();
-    let year = html("p.al_name").text().match(/[0-9]+/g);
+    let year = html("p.al_name").text().match(/[0-9]{4}$/g);
     let artists = html("ul.singers").text();
 
     body += `<b>Album:</b> ${album} - ${year}\n<b>Artist[s]</b>: ${artists}\n\n<b>Lyrics:</b>\n\n${lyrics}`
