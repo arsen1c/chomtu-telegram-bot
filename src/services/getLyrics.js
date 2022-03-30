@@ -21,6 +21,9 @@ const lyreka = async (songName) => {
       const lyrics = result('div.lyrics').text().trim();
       // Grab the cover pic of that song.
       const coverURL = result('img.img-track-cover').attr('src');
+      
+      // Youtube video
+      const ytLink = result("div#youtube-media-container").attr("data-id");
       return {
         success: true,
         song,
@@ -28,6 +31,7 @@ const lyreka = async (songName) => {
         lyrics,
         cover: coverURL,
         url: baseURL,
+        ytLink: ytLink && `https://youtube.com/watch?v=${ytLink}`
       };
     })
     .catch((err) => {
