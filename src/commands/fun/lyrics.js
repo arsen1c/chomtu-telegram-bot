@@ -25,7 +25,7 @@ module.exports = {
             inline_keyboard: [
               [
                 { text: 'Read on Lyreka', url: resultObj.url },
-                ...(resultObj.ytLink && [{ text: 'Listen on YouTube', url: resultObj.ytLink }])
+                ...(resultObj.ytLink && [{ text: 'Watch on YouTube', url: resultObj.ytLink }])
               ]
             ],
           },
