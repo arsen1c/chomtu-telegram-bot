@@ -1,7 +1,6 @@
 import { fetchHTML, iterateHTML, getCityCords } from '../../helpers';
 
 const getCurrentWeatherEmoji = (remark) => {
-  console.log("Remark:", remark)
   const options = {
     "Mostly Cloudy": ["⛅️", "☁️"],
     "Partly Cloudy": ["⛅️", "☁️"],
@@ -26,22 +25,6 @@ const getCurrentWeatherEmoji = (remark) => {
   return ["🌥", "🌥"];
 }
 
-const getAQIRemark = (aqi) => {
-  let remark;
-
-  if (aqi < 50) {
-    remark = 'Good';
-  } else if (aqi > 50 && aqi <= 100) {
-    remark = 'satisfactory';
-  } else if (aqi > 100 && aqi < 200) {
-    remark = 'moderate';
-  } else {
-    remark = 'poor';
-  }
-
-  return remark;
-};
-
 const getWeather = async (cityName) => {
   try {
     const cityCords = await getCityCords(cityName);
@@ -59,6 +42,7 @@ const getWeather = async (cityName) => {
           .split('°')[0];
         // Air Quality
         const aqi = result('text[data-testid="DonutChartValue"]').text();
+        const aqiRemark = result('.AirQualityText--severity--1fu5k').text();
         // Current Weather
         const currentWeather = result(
           '.CurrentConditions--phraseValue--2Z18W'
@@ -108,7 +92,7 @@ const getWeather = async (cityName) => {
             `💧 <b>Humidity:</b> ${details.Humidity}\n` +
             `👁 <b>Visibility:</b> ${details.Visibility}\n\n` +
             `<b>UV Index:</b> ${details['UV Index']}\n` +
-            `<b>Air Quality:</b> ${aqi} (${getAQIRemark(aqi)})\n\n` +
+            `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
             ` <b>Last Update:</b> ${lastUpdated}`,
         };
       })
