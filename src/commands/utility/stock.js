@@ -6,6 +6,7 @@ module.exports = {
   description: 'Get data about a specific stock(India Only)',
   usage: '<stock-name>',
   args: true,
+  argumentType: "an Indian stock name",
   chatAction: 'typing',
   async execute(ctx, stock) {
     try {

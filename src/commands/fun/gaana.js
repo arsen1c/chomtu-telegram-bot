@@ -4,6 +4,7 @@ module.exports = {
   name: 'gaana',
   description: 'Search for lyrics on Gaana.com',
   args: true,
+  argumentType: "song name",
   usage: '<song-name>',
   chatAction: 'typing',
   async execute(ctx, songName) {

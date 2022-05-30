@@ -117,6 +117,7 @@ module.exports = {
   name: 'weather',
   description: 'Check weather of a city',
   args: true,
+  argumentType: "a city name",
   usage: '<city-name>',
   chatAction: 'typing',
   async execute(ctx, cityName) {

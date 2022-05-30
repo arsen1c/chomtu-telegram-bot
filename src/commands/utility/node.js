@@ -8,6 +8,7 @@ module.exports = {
   description: 'Executes Nodejs/Javascript\n\nWRANING: Dont use String templates',
   usage: '<javascript-code>',
   args: true,
+  argumentType: "Javascript code snippet",
   chatAction: 'typing',
   async execute(ctx, code) {
     function escBackticks(str) {

@@ -35,8 +35,8 @@ bot.on('message', (ctx) => {
   if (!command) return;
 
   if (command.args && !args.length) {
-    let reply = `You didn't provide any arguments.\n\nUsage: /${command.name} ${command.usage}`;
-    return ctx.reply(reply, { reply_to_message_id: ctx.message.message_id });
+    let reply = `*Please provide ${command.argumentType || "a query"}.*\n\n*Usage*: /${command.name} _${command.usage}_\n*Description*: ${command.description}`;
+    return ctx.replyWithMarkdown(reply, { reply_to_message_id: ctx.message.message_id });
   }
 
   try {

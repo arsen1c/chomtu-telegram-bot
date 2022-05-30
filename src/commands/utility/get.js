@@ -16,8 +16,8 @@ module.exports = {
     );
 
     return resp
-      .then(async (res) => {
-        const images = await iterateLINKS(
+      .then((res) => {
+        const images = iterateLINKS(
           res,
           '.result-images > a > img',
           'src'

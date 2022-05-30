@@ -2,8 +2,9 @@ import getLyrics from '../../services/getLyrics';
 
 module.exports = {
   name: 'lyrics',
-  description: 'Get lyrics of songs [English]',
+  description: 'Get lyrics of a song (English)',
   args: true,
+  argumentType: "a song name",
   usage: '<song-name>',
   chatAction: 'typing',
   async execute(ctx, songName) {
