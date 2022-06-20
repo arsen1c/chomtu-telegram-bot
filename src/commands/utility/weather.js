@@ -36,48 +36,72 @@ const getWeather = async (cityName) => {
       .then((result) => {
         // Grab city, temp, aqi, weather from them HTML
         const city = result('.CurrentConditions--location--kyTeL').text();
+
         // Temperature
         const temp = result('span[data-testid=TemperatureValue]')
           .text()
           .split('°')[0];
+
         // Air Quality
         const aqi = result('text[data-testid="DonutChartValue"]').text();
         const aqiRemark = result('.AirQualityText--severity--1fu5k').text();
+
         // Current Weather
         const currentWeather = result(
           '.CurrentConditions--phraseValue--2Z18W'
         ).text();
+
         // Exapected temperature
         const expectedTemperature = result('.CurrentConditions--tempHiLoValue--3SUHy').text();
         let dayNight = expectedTemperature.match(/\d+/g).join("° / ");
+
         // Last updated
         const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
           .text()
           .split('As of')
           .join('');
         const hour = Number(lastUpdated.match(/[0-9]+/g)[0]);
-        console.log("hour:", hour < 5 && hour > 19)
+        // console.log("hour:", hour < 5 && hour > 19)
+
+        // Insight Data
+        const insight_heading = result(".InsightNotification--headline--1hVMc").text();
+        const insight_desc = result(".InsightNotification--text--UxsQt").text();
+
         // Other details labels
         const detailsLabels = iterateHTML(
           result,
           '.WeatherDetailsListItem--label--3PkXl'
         );
         // console.log(detailsLabels);
+
         // Other details values
         const detailsValues = iterateHTML(
           result,
           '.WeatherDetailsListItem--wxData--2s6HT'
         );
         // console.log(detailsValues);
-
         // Combine detailsLabels and detailsValues to form an object
         const details = Object.assign(
           ...detailsLabels.map((key, i) => ({
             [key]: detailsValues[i],
           }))
         );
-
 	     // console.log("Details: ", details); 
+
+       // Todays forecast
+       const forecastTime = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Ellipsis--ellipsis--1sNTm");
+       const forecastTemperature = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Column--temp--5hqI_ > span[data-testid='TemperatureValue']");
+       const forecastRain = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Column--column--1p659 span.Column--precip--2ck8J");
+       // console.log(forecastRain[1].match(/[0-9]+/))
+       const foreCast = Object.assign(
+          ...forecastTime.map((key, i) => ({
+            [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(/[0-9]+/)}%)`,
+          }))
+        );
+
+
+       // console.log(foreCast)
+
         return {
           success: true,
           url: baseURL,
@@ -86,6 +110,7 @@ const getWeather = async (cityName) => {
             `${(hour < 5 || hour > 19) ? getCurrentWeatherEmoji(currentWeather)[1] : getCurrentWeatherEmoji(currentWeather)[0]} <b>Weather:</b> ${currentWeather}\n` +
             `🌡 <b>Temperature:</b> ${temp}°\n` +
             `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
+            `${insight_heading && `💡 <b>Insight: ${insight_desc}</b>\n\n`}` +
             `🌬 <b>Wind:</b> ${details.Wind.split('Wind Direction').join(
               ' '
             )}\n` +
@@ -93,12 +118,18 @@ const getWeather = async (cityName) => {
             `👁 <b>Visibility:</b> ${details.Visibility}\n\n` +
             `<b>UV Index:</b> ${details['UV Index']}\n` +
             `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
-            ` <b>Last Update:</b> ${lastUpdated}`,
+            `<b>Last Update:</b> ${lastUpdated}\n\n` +
+            `📅 <b>Today's Forecast</b>\n\n` +
+            `<b>Morning</b>: ${foreCast.Morning}\n` + 
+            `<b>Afternoon</b>: ${foreCast.Afternoon}\n` + 
+            `<b>Evening</b>: ${foreCast.Evening}\n` + 
+            `<b>Overnight</b>: ${foreCast.Overnight}\n` 
+
         };
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.log(err.message);
         return {
           success: false,
           message: 'City not found',
