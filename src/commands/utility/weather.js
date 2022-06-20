@@ -2,6 +2,7 @@ import { fetchHTML, iterateHTML, getCityCords } from '../../helpers';
 
 const getCurrentWeatherEmoji = (remark) => {
   const options = {
+    // ["Day", "Night"]
     "Mostly Cloudy": ["⛅️", "☁️"],
     "Partly Cloudy": ["⛅️", "☁️"],
     "Clear": ["☀️", "🌕"],
@@ -18,6 +19,7 @@ const getCurrentWeatherEmoji = (remark) => {
     "Light Rain with Thunder": ["🌧", "🌧"],
     "Thunder": ["🌩", "🌩"],
     "Rain": ["🌧", "🌧"],
+    "Drizzle": ["🌧", "🌧"],
     "Rain and Snow": ["❄️", "❄️"],
     "Snow": ["❄️", "❄️"]
   }
