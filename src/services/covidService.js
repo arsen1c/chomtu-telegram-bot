@@ -29,10 +29,7 @@ const getCovidData = async (country) => {
       // console.log(result('.label-counter').text().split('/')[2].trim())
 
       // Trying to dates
-      const dateDiv = result('.content-inner').text().trim().split('\n')[2];
-      const date = new Date(dateDiv).toLocaleString(undefined, {
-        timeZone: 'Asia/Kolkata',
-      });
+      const date = result('div.news_date > h4').text();
 
       // Return the Data in JSON form
       return {
