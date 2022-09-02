@@ -1,6 +1,8 @@
-import { iterateLINKS, fetchHTML } from '../../helpers';
+import { iterateLINKS, fetchDDGHTML } from '../../helpers';
+import axios from 'axios';
+import userAgents from '../../helpers/user-agents.json'
 
-const randomNumber = (max) => Math.floor(Math.random() * max - 1);
+const randomNumber = (max) => Math.floor(Math.random() * max);
 
 module.exports = {
   name: 'get',
@@ -9,35 +11,41 @@ module.exports = {
   chatAction: 'upload_photo',
   usage: '<query>',
   async execute(ctx, query) {
-    const resp = fetchHTML(
-      `https://searx.run/search?q=${query.join(
-        '%20'
-      )}&categories=images&language=en-US`
-    );
+    console.log("Query:", query);
+    try {
+      const response = await fetchDDGHTML(query.join("+"));
+      const regex = /vqd=([\d-]+)\&/g;
+      const vdqToken = response.match(regex)[0];
+      // p=-1 to turn off safe search
+      const baseUrl = `https://duckduckgo.com/i.js?l=us-en&o=json&q=${query.join("+")}&${vdqToken}f=,,,,,&p=1&p=-1`;
+      const currUserAgent = userAgents[randomNumber(userAgents.length)];
 
-    return resp
-      .then((res) => {
-        const images = iterateLINKS(
-          res,
-          '.result-images > a > img',
-          'src'
-        );
-        const image = images[randomNumber(images.length)];
-
-        if (images.length) {
-          return ctx.telegram.sendPhoto(ctx.chat.id, image, {
-            parse_mode: 'HTML',
-            reply_markup: {
-              inline_keyboard: [[{ text: 'Image Link', url: image }]],
-            },
-          });
+      const config = {
+        method: 'get',
+        url: baseUrl,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          Accept: 'application/json, text/javascript, */*; q=0.01',
+          'Cache-Control': 'no-cache',
+          Referer: "https://duckduckgo.com/",
+          "User-Agent": currUserAgent
         }
-        return ctx.reply('Nothing found 🤨');
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
-        return ctx.reply(err.message);
-      });
+      };
+
+      const { data: { results: images } } = await axios(config)
+
+      if (images.length > 0) {
+        const imageObj = images[randomNumber(images.length)];
+        return ctx.telegram.sendPhoto(ctx.chat.id, imageObj.image, {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [[{ text: 'Image Link', url: imageObj.image }]],
+          },
+        });
+      }
+      return ctx.reply('Nothing found 🤨');
+    } catch (error) {
+      ctx.reply(error.message)
+    }
   },
 };
