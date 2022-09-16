@@ -9,7 +9,7 @@ module.exports = {
   description: 'Get covid data of a specific country',
   usage: '<country-name>',
   args: true,
-  argumentType: "a country name",
+  argumentType: 'a country name',
   chatAction: 'typing',
   async execute(ctx, country) {
     const result = await covidService.covid(country.join('-'));

@@ -5,7 +5,7 @@ module.exports = {
   description: 'Get search results from DuckDuckGo',
   usage: '<query-to-search>',
   args: true,
-  argumentType: "a query to search",
+  argumentType: 'a query to search',
   chatAction: 'typing',
   async execute(ctx, query) {
     const result = await ddg(query);

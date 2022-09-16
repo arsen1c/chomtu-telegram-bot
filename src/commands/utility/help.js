@@ -19,7 +19,7 @@ module.exports = {
       for (let [value, index] of commands) {
         command += `/${value}\n`;
       }
-	command += "\nType /help <command_name> for command details."
+      command += '\nType /help <command_name> for command details.';
       ctx.reply(command);
     } else {
       ctx.reply('No command found');

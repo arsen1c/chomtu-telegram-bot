@@ -3,29 +3,29 @@ import { fetchHTML, iterateHTML, getCityCords } from '../../helpers';
 const getCurrentWeatherEmoji = (remark) => {
   const options = {
     // ["Day", "Night"]
-    "Mostly Cloudy": ["⛅️", "☁️"],
-    "Partly Cloudy": ["⛅️", "☁️"],
-    "Clear": ["☀️", "🌕"],
-    "Sunny": ["🌞", "🌞"],
-    "Mostly Clear": ["🌤", "🌗"],
-    "Fog": ["🌫️", "🌫"],
-    "Showers in the Vicinity": ["☔️", "☔️"],
-    "Rain Shower": ["🌦", "☔️"],
-    "Light Rain Shower/Wind": ["🌦", "☔️"],
-    "Smoke": ["💨", "💨"],
-    "Fair": ["🌤", "🌖"],
-    "Heavy Rain/Wind": ["🌧", "🌧"],
-    "Heavy Thunderstorm/Wind": ["⛈", "⛈"],
-    "Light Rain with Thunder": ["🌧", "🌧"],
-    "Thunder": ["🌩", "🌩"],
-    "Rain": ["🌧", "🌧"],
-    "Drizzle": ["🌧", "🌧"],
-    "Rain and Snow": ["❄️", "❄️"],
-    "Snow": ["❄️", "❄️"]
-  }
+    'Mostly Cloudy': ['⛅️', '☁️'],
+    'Partly Cloudy': ['⛅️', '☁️'],
+    Clear: ['☀️', '🌕'],
+    Sunny: ['🌞', '🌞'],
+    'Mostly Clear': ['🌤', '🌗'],
+    Fog: ['🌫️', '🌫'],
+    'Showers in the Vicinity': ['☔️', '☔️'],
+    'Rain Shower': ['🌦', '☔️'],
+    'Light Rain Shower/Wind': ['🌦', '☔️'],
+    Smoke: ['💨', '💨'],
+    Fair: ['🌤', '🌖'],
+    'Heavy Rain/Wind': ['🌧', '🌧'],
+    'Heavy Thunderstorm/Wind': ['⛈', '⛈'],
+    'Light Rain with Thunder': ['🌧', '🌧'],
+    Thunder: ['🌩', '🌩'],
+    Rain: ['🌧', '🌧'],
+    Drizzle: ['🌧', '🌧'],
+    'Rain and Snow': ['❄️', '❄️'],
+    Snow: ['❄️', '❄️'],
+  };
   if (options[remark]) return options[remark];
-  return ["🌥", "🌥"];
-}
+  return ['🌥', '🌥'];
+};
 
 const getWeather = async (cityName) => {
   try {
@@ -54,8 +54,10 @@ const getWeather = async (cityName) => {
         ).text();
 
         // Exapected temperature
-        const expectedTemperature = result('.CurrentConditions--tempHiLoValue--3SUHy').text();
-        let dayNight = expectedTemperature.match(/\d+/g).join("° / ");
+        const expectedTemperature = result(
+          '.CurrentConditions--tempHiLoValue--3SUHy'
+        ).text();
+        let dayNight = expectedTemperature.match(/\d+/g).join('° / ');
 
         // Last updated
         const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
@@ -66,8 +68,10 @@ const getWeather = async (cityName) => {
         // console.log("hour:", hour < 5 && hour > 19)
 
         // Insight Data
-        const insight_heading = result(".InsightNotification--headline--1hVMc").text();
-        const insight_desc = result(".InsightNotification--text--UxsQt").text();
+        const insight_heading = result(
+          '.InsightNotification--headline--1hVMc'
+        ).text();
+        const insight_desc = result('.InsightNotification--text--UxsQt').text();
 
         // Other details labels
         const detailsLabels = iterateHTML(
@@ -88,28 +92,42 @@ const getWeather = async (cityName) => {
             [key]: detailsValues[i],
           }))
         );
-	     // console.log("Details: ", details); 
+        // console.log("Details: ", details);
 
-       // Todays forecast
-       const forecastTime = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Ellipsis--ellipsis--1sNTm");
-       const forecastTemperature = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Column--temp--5hqI_ > span[data-testid='TemperatureValue']");
-       const forecastRain = iterateHTML(result, ".TodayWeatherCard--TableWrapper--2kEPM .Column--column--1p659 span.Column--precip--2ck8J");
-       // console.log(forecastRain[1].match(/[0-9]+/))
-       const foreCast = Object.assign(
+        // Todays forecast
+        const forecastTime = iterateHTML(
+          result,
+          '.TodayWeatherCard--TableWrapper--2kEPM .Ellipsis--ellipsis--1sNTm'
+        );
+        const forecastTemperature = iterateHTML(
+          result,
+          ".TodayWeatherCard--TableWrapper--2kEPM .Column--temp--5hqI_ > span[data-testid='TemperatureValue']"
+        );
+        const forecastRain = iterateHTML(
+          result,
+          '.TodayWeatherCard--TableWrapper--2kEPM .Column--column--1p659 span.Column--precip--2ck8J'
+        );
+        // console.log(forecastRain[1].match(/[0-9]+/))
+        const foreCast = Object.assign(
           ...forecastTime.map((key, i) => ({
-            [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(/[0-9]+/)}%)`,
+            [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
+              /[0-9]+/
+            )}%)`,
           }))
         );
 
-
-       // console.log(foreCast)
+        // console.log(foreCast)
 
         return {
           success: true,
           url: baseURL,
           markdown:
             `<b>${city}</b>\n\n` +
-            `${(hour < 5 || hour > 19) ? getCurrentWeatherEmoji(currentWeather)[1] : getCurrentWeatherEmoji(currentWeather)[0]} <b>Weather:</b> ${currentWeather}\n` +
+            `${
+              hour < 5 || hour > 19
+                ? getCurrentWeatherEmoji(currentWeather)[1]
+                : getCurrentWeatherEmoji(currentWeather)[0]
+            } <b>Weather:</b> ${currentWeather}\n` +
             `🌡 <b>Temperature:</b> ${temp}°\n` +
             `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
             `${insight_heading && `💡 <b>Insight: ${insight_desc}</b>\n\n`}` +
@@ -122,11 +140,10 @@ const getWeather = async (cityName) => {
             `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
             `<b>Last Update:</b> ${lastUpdated}\n\n` +
             `📅 <b>Today's Forecast</b>\n\n` +
-            `<b>Morning</b>: ${foreCast.Morning}\n` + 
-            `<b>Afternoon</b>: ${foreCast.Afternoon}\n` + 
-            `<b>Evening</b>: ${foreCast.Evening}\n` + 
-            `<b>Overnight</b>: ${foreCast.Overnight}\n` 
-
+            `<b>Morning</b>: ${foreCast.Morning}\n` +
+            `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
+            `<b>Evening</b>: ${foreCast.Evening}\n` +
+            `<b>Overnight</b>: ${foreCast.Overnight}\n`,
         };
       })
       .catch((err) => {
@@ -150,7 +167,7 @@ module.exports = {
   name: 'weather',
   description: 'Check weather of a city',
   args: true,
-  argumentType: "a city name",
+  argumentType: 'a city name',
   usage: '<city-name>',
   chatAction: 'typing',
   async execute(ctx, cityName) {

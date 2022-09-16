@@ -26,19 +26,18 @@ const fetchDDGHTML = async (query) => {
       'X-Requested-With': 'XMLHttpRequest',
       Accept: 'application/json, text/javascript, */*; q=0.01',
       'Cache-Control': 'no-cache',
-      Referer: "https://duckduckgo.com/",
-    }
+      Referer: 'https://duckduckgo.com/',
+    },
   };
 
   return axios(config)
     .then(function (response) {
-      return JSON.stringify(response.data)
+      return JSON.stringify(response.data);
     })
     .catch(function (error) {
       console.log(error);
-      throw Error(error.message)
+      throw Error(error.message);
     });
-
 };
 
 const iterateLINKS = (result, element, attrName = 'href') => {
