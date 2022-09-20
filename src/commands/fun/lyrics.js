@@ -28,8 +28,9 @@ module.exports = {
             inline_keyboard: [
               [
                 { text: 'Read on Lyreka', url: resultObj.url },
-                ...(resultObj.ytLink && [
-                  { text: 'Watch on YouTube', url: resultObj.ytLink },
+                ...(resultObj.ytVideo && [
+                  { text: 'Watch on YT', url: resultObj.ytVideo },
+                  { text: 'Listen on YT', url: resultObj.ytMusic },
                 ]),
               ],
             ],
@@ -42,8 +43,9 @@ module.exports = {
             inline_keyboard: [
               [
                 { text: 'Read on Lyreka', url: resultObj.url },
-                ...(resultObj.ytLink && [
-                  { text: 'Listen on YouTube', url: resultObj.ytLink },
+                ...(resultObj.ytMusic && [
+                  { text: 'Watch on YT', url: resultObj.ytVideo },
+                  { text: 'Listen on YT', url: resultObj.ytMusic },
                 ]),
               ],
             ],

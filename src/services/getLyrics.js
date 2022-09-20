@@ -23,7 +23,7 @@ const lyreka = async (songName) => {
       const coverURL = result('img.img-track-cover').attr('src');
 
       // Youtube video
-      const ytLink = result('div#youtube-media-container').attr('data-id');
+      const ytVideoId = result('div#youtube-media-container').attr('data-id');
       return {
         success: true,
         song,
@@ -31,7 +31,8 @@ const lyreka = async (songName) => {
         lyrics,
         cover: coverURL,
         url: baseURL,
-        ytLink: ytLink && `https://youtube.com/watch?v=${ytLink}`,
+        ytVideo: ytVideoId && `https://youtube.com/watch?v=${ytVideoId}`,
+        ytMusic: ytVideoId && `https://music.youtube.com/watch?v=${ytVideoId}`,
       };
     })
     .catch((err) => {
