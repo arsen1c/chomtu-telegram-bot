@@ -1,9 +1,6 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
 import { MAPBOX_KEY } from '../config';
-import userAgents from '../helpers/user-agents.json';
-
-const randomNumber = (max) => Math.floor(Math.random() * max);
 
 const iterateHTML = (result, attr) => {
   const arr = [];
