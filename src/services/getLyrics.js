@@ -44,11 +44,6 @@ const lyreka = async (songName) => {
     });
 };
 
-/**
-  Following step is harmful, check more here: https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature/20100521#20100521
-*/
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-
 // [+] From Gaana.com [+]
 const getSuggestions = async (lyrics) => {
   const URL = `https://gsearch-prod-cloud.gaana.com/gaanasearch-api/mobilesuggest/autosuggest-lite-vltr-ro?geoLocation=IN&query=${lyrics}&content_filter=2&include=allItems&isRegSrch=0&webVersion=mix&rType=web&usrLang=Hindi,English,Punjabi`;
