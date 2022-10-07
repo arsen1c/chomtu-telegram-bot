@@ -9,9 +9,9 @@ module.exports = {
       const command = commands.get(args[0]);
       return ctx.replyWithMarkdown(
         `*Command name:*\n${command.name}\n\n` +
-          `*Description:*\n${command.description}\n\n` +
-          `*Requires Arguments:*\n${command.args}\n\n` +
-          `*Usage:*\n\/${command.name} ${command.usage}\n\n`,
+        `*Description:*\n${command.description}\n\n` +
+        `*Requires Arguments:*\n${command.args}\n\n` +
+        `*Usage:*\n\/${command.name} ${command.usage}\n\n`,
         { reply_to_message_id: ctx.message.message_id }
       );
     } else if (!args.length) {

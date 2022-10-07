@@ -10,6 +10,14 @@ const iterateHTML = (result, attr) => {
   return arr;
 };
 
+const iterateHTMLText = (result, attr, concat = " ") => {
+  const arr = [];
+  result(attr).each((i, element) => {
+    arr.push(result(element).text().match(/[a-zA-z]+/g).join(concat));
+  });
+  return arr;
+};
+
 const fetchHTML = async (url) => {
   const { data } = await axios.get(url);
   return cheerio.load(data);
@@ -45,6 +53,14 @@ const iterateLINKS = (result, element, attrName = 'href') => {
   return arr;
 };
 
+const iterateLINKSAndText = (result, element, attrName = 'href') => {
+  const arr = [];
+  result(element).each((i, elementName) => {
+    arr.push([result(elementName).text(), result(elementName).attr(attrName)]);
+  });
+  return arr;
+};
+
 const getCityCords = (cityName) =>
   axios
     .get(
@@ -57,4 +73,4 @@ const getCityCords = (cityName) =>
     })
     .catch((err) => console.log(err.message));
 
-export { iterateHTML, fetchHTML, iterateLINKS, getCityCords, fetchDDGHTML };
+export { iterateHTML, fetchHTML, iterateLINKS, getCityCords, fetchDDGHTML, iterateLINKSAndText, iterateHTMLText };
