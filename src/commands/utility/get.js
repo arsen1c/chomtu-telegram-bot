@@ -11,7 +11,6 @@ module.exports = {
   chatAction: 'upload_photo',
   usage: '<query>',
   async execute(ctx, query) {
-    console.log('Query:', query);
     try {
       const response = await fetchDDGHTML(query.join('+'));
       const regex = /vqd=([\d-]+)\&/g;
@@ -38,12 +37,16 @@ module.exports = {
         data: { results: images },
       } = await axios(config);
 
+      // console.log("Images:", images);
       if (images.length > 0) {
         const imageObj = images[randomNumber(images.length)];
         return ctx.telegram.sendPhoto(ctx.chat.id, imageObj.image, {
           parse_mode: 'HTML',
           reply_markup: {
-            inline_keyboard: [[{ text: 'Image Link', url: imageObj.image }]],
+            inline_keyboard: [[
+              { text: 'Open Image', url: imageObj.image },
+              { text: imageObj.title, url: imageObj.url }
+            ]],
           },
         });
       }
