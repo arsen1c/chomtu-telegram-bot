@@ -2,8 +2,7 @@ import express from 'express';
 import { BRAD_API, BOT_API } from './src/config';
 const { Telegraf } = require('telegraf');
 
-const BOT_TOKEN = process.env.NODE_ENV === 'production'
-  ? BOT_API : BRAD_API;
+const BOT_TOKEN = process.env.NODE_ENV === 'production' ? BOT_API : BRAD_API;
 const bot = new Telegraf(BOT_TOKEN);
 const fs = require('fs');
 const app = express();
