@@ -46,21 +46,21 @@ const getWeather = async (cityName) => {
 
         // Air Quality
         const aqi = result('text[data-testid="DonutChartValue"]').text();
-        const aqiRemark = result('.AirQualityText--severity--1fu5k').text();
+        const aqiRemark = result('.AirQualityText--severity--1smy9').text();
 
         // Current Weather
         const currentWeather = result(
-          '.CurrentConditions--phraseValue--2Z18W'
+          '.CurrentConditions--phraseValue--mZC_p'
         ).text();
 
         // Exapected temperature
         const expectedTemperature = result(
-          '.CurrentConditions--tempHiLoValue--3SUHy'
+          '.CurrentConditions--tempHiLoValue--3T1DG'
         ).text();
         let dayNight = expectedTemperature.match(/\d+/g).join('° / ');
 
         // Last updated
-        const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
+        const lastUpdated = result('.CurrentConditions--timestamp--1ybTk')
           .text()
           .split('As of')
           .join('');
@@ -76,14 +76,14 @@ const getWeather = async (cityName) => {
         // Other details labels
         const detailsLabels = iterateHTML(
           result,
-          '.WeatherDetailsListItem--label--3PkXl'
+          '.WeatherDetailsListItem--label--2ZacS'
         );
         // console.log(detailsLabels);
 
         // Other details values
         const detailsValues = iterateHTML(
           result,
-          '.WeatherDetailsListItem--wxData--2s6HT'
+          '.WeatherDetailsListItem--wxData--kK35q'
         );
         // console.log(detailsValues);
         // Combine detailsLabels and detailsValues to form an object
@@ -97,15 +97,15 @@ const getWeather = async (cityName) => {
         // Todays forecast
         const forecastTime = iterateHTML(
           result,
-          '.TodayWeatherCard--TableWrapper--2kEPM .Ellipsis--ellipsis--1sNTm'
+          '.Column--label--2s30x .Ellipsis--ellipsis--3ADai'
         );
         const forecastTemperature = iterateHTML(
           result,
-          ".TodayWeatherCard--TableWrapper--2kEPM .Column--temp--5hqI_ > span[data-testid='TemperatureValue']"
+          ".Column--innerWrapper--3ocxD .Column--temp--1sO_J > span[data-testid='TemperatureValue']"
         );
         const forecastRain = iterateHTML(
           result,
-          '.TodayWeatherCard--TableWrapper--2kEPM .Column--column--1p659 span.Column--precip--2ck8J'
+          'span.Column--precip--3JCDO'
         );
         // console.log(forecastRain[1].match(/[0-9]+/))
         const foreCast = Object.assign(
@@ -116,6 +116,7 @@ const getWeather = async (cityName) => {
           }))
         );
 
+
         // console.log(foreCast)
 
         return {
@@ -123,10 +124,9 @@ const getWeather = async (cityName) => {
           url: baseURL,
           markdown:
             `<b>${city}</b>\n\n` +
-            `${
-              hour < 5 || hour > 19
-                ? getCurrentWeatherEmoji(currentWeather)[1]
-                : getCurrentWeatherEmoji(currentWeather)[0]
+            `${hour < 5 || hour > 19
+              ? getCurrentWeatherEmoji(currentWeather)[1]
+              : getCurrentWeatherEmoji(currentWeather)[0]
             } <b>Weather:</b> ${currentWeather}\n` +
             `🌡 <b>Temperature:</b> ${temp}°\n` +
             `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
