@@ -39,6 +39,9 @@ const getWeather = async (cityName) => {
         // Grab city, temp, aqi, weather from them HTML
         const city = result('.CurrentConditions--location--1YWj_').text();
 
+        // Weather background image
+        const bgImage = result(".CurrentConditions--CurrentConditions--1XEyg > section").attr("style").match(/\(([^)]+)\)/)[1];
+
         // Temperature
         const temp = result('span[data-testid=TemperatureValue]')
           .text()
@@ -77,14 +80,12 @@ const getWeather = async (cityName) => {
           result,
           '.WeatherDetailsListItem--label--2ZacS'
         );
-        // console.log(detailsLabels);
 
         // Other details values
         const detailsValues = iterateHTML(
           result,
           '.WeatherDetailsListItem--wxData--kK35q'
         );
-        // console.log(detailsValues);
         // Combine detailsLabels and detailsValues to form an object
         const details = Object.assign(
           ...detailsLabels.map((key, i) => ({
@@ -115,9 +116,6 @@ const getWeather = async (cityName) => {
           }))
         );
 
-
-        // console.log(foreCast)
-
         return {
           success: true,
           url: baseURL,
@@ -142,12 +140,12 @@ const getWeather = async (cityName) => {
             `📅 <b>Today's Forecast</b>\n\n` +
             `<b>Morning</b>: ${foreCast.Morning}\n` +
             `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
-            `<b>Evening</b>: ${foreCast.Evening}\n` +
-            `<b>Overnight</b>: ${foreCast.Overnight}\n`,
+            `<b>Evening</b>: ${foreCast.Evening}\n\n` +
+            `<b>Overnight</b>: ${foreCast.Overnight}\n` +
+            `<a href='${bgImage}'>Background</a>\n`
         };
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.log(err.message);
         return {
           success: false,
