@@ -140,8 +140,8 @@ const getWeather = async (cityName) => {
             `📅 <b>Today's Forecast</b>\n\n` +
             `<b>Morning</b>: ${foreCast.Morning}\n` +
             `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
-            `<b>Evening</b>: ${foreCast.Evening}\n\n` +
-            `<b>Overnight</b>: ${foreCast.Overnight}\n` +
+            `<b>Evening</b>: ${foreCast.Evening}\n` +
+            `<b>Overnight</b>: ${foreCast.Overnight}\n\n` +
             `<a href='${bgImage}'>Background</a>\n`
         };
       })
