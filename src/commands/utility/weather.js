@@ -37,7 +37,7 @@ const getWeather = async (cityName) => {
     return scrapeData
       .then((result) => {
         // Grab city, temp, aqi, weather from them HTML
-        const city = result('.CurrentConditions--location--kyTeL').text();
+        const city = result('.CurrentConditions--location--1YWj_').text();
 
         // Temperature
         const temp = result('span[data-testid=TemperatureValue]')
