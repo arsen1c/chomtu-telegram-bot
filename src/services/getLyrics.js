@@ -46,7 +46,7 @@ const lyreka = async (songName) => {
 
 // [+] From Gaana.com [+]
 const getSuggestions = async (lyrics) => {
-  const URL = `https://gsearch-prod-cloud.gaana.com/gaanasearch-api/mobilesuggest/autosuggest-lite-vltr-ro?geoLocation=IN&query=${lyrics}&content_filter=2&include=allItems&isRegSrch=0&webVersion=mix&rType=web&usrLang=Hindi,English,Punjabi`;
+  const URL = `https://gsearch.gaana.com/gaanasearch-api/mobilesuggest/autosuggest-lite-vltr-ro?geoLocation=IN&query=${lyrics}&content_filter=2&include=allItems&isRegSrch=0&webVersion=mix&rType=web&usrLang=Hindi,English,Punjabi`;
   let suggestions = `Didn't find the song, but I have some suggestions for ya.\nType: /gaana (song_suggestion)\n\n`;
 
   try {
@@ -67,17 +67,16 @@ const getSuggestions = async (lyrics) => {
 };
 
 const gaana = async (song) => {
-  const URL = `https://gaana.com/lyrics/`;
-  const data = fetchHTML(URL + '' + song.join('-'));
+  const URL = `https://gaana.com/song/${song.join('-')}`;
+  const data = fetchHTML(URL);
 
   return data
     .then(async (html) => {
       let body = ``;
-      let lyrics = html('.lyr_data > ._inner > p').text();
-      let album = html('p.al_name > a').text();
-      let year = html('p.al_name')
-        .text()
-        .match(/[0-9]{4}$/g);
+      let lyrics = html('section.lyrics > div.data > p').text();
+      if (!lyrics) throw new Error("Lyrics not found")
+      let album = html('._b > _name > a').text();
+      let year = html('._b > _date').text();
       let artists = html('ul.singers').text();
 
       body += `<b>Album:</b> ${album} - ${year}\n<b>Artist[s]</b>: ${artists}\n\n<b>Lyrics:</b>\n\n${lyrics}`;
