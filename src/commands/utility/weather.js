@@ -43,7 +43,6 @@ const getWeather = async (cityName) => {
         const temp = result('span[data-testid=TemperatureValue]')
           .text()
           .split('°')[0];
-
         // Air Quality
         const aqi = result('text[data-testid="DonutChartValue"]').text();
         const aqiRemark = result('.AirQualityText--severity--1smy9').text();
@@ -129,7 +128,8 @@ const getWeather = async (cityName) => {
               : getCurrentWeatherEmoji(currentWeather)[0]
             } <b>Weather:</b> ${currentWeather}\n` +
             `🌡 <b>Temperature:</b> ${temp}°\n` +
-            `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
+            `🎐 <b>${expectedTemperature}</b>\n\n` +
+            // `🎐 <b>Day / Night:</b> ${dayNight}°\n\n` +
             `${insight_heading && `💡 <b>Insight: ${insight_desc}</b>\n\n`}` +
             `🌬 <b>Wind:</b> ${details.Wind.split('Wind Direction').join(
               ' '
