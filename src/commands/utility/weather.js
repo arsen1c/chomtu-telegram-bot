@@ -112,7 +112,7 @@ const getWeather = async (cityName) => {
           ...forecastTime.map((key, i) => ({
             [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
               /[0-9]+/
-            )}%)`,
+            ) || 0}%)`,
           }))
         );
 
