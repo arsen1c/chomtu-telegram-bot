@@ -40,7 +40,7 @@ const getWeather = async (cityName) => {
         const city = result('.CurrentConditions--location--1YWj_').text();
 
         // Weather background image
-        const bgImage = result(".CurrentConditions--CurrentConditions--1XEyg > section").attr("style").match(/\(([^)]+)\)/)[1];
+        const bgImage = result(".CurrentConditions--CurrentConditions--1swR9 > section").attr("style").match(/\(([^)]+)\)/)[1];
 
         // Temperature
         const temp = result('span[data-testid=TemperatureValue]')
@@ -48,7 +48,7 @@ const getWeather = async (cityName) => {
           .split('°')[0];
         // Air Quality
         const aqi = result('text[data-testid="DonutChartValue"]').text();
-        const aqiRemark = result('.AirQualityText--severity--1smy9').text();
+        const aqiRemark = result('.AirQualityText--severity--1fu5k').text();
 
         // Current Weather
         const currentWeather = result(
@@ -57,12 +57,12 @@ const getWeather = async (cityName) => {
 
         // Exapected temperature
         const expectedTemperature = result(
-          '.CurrentConditions--tempHiLoValue--3T1DG'
+          '.CurrentConditions--tempHiLoValue--3SUHy'
         ).text();
         let dayNight = expectedTemperature.match(/\d+/g).join('° / ');
 
         // Last updated
-        const lastUpdated = result('.CurrentConditions--timestamp--1ybTk')
+        const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
           .text()
           .split('As of')
           .join('');
@@ -78,13 +78,13 @@ const getWeather = async (cityName) => {
         // Other details labels
         const detailsLabels = iterateHTML(
           result,
-          '.WeatherDetailsListItem--label--2ZacS'
+          '.WeatherDetailsListItem--label--3PkXl'
         );
 
         // Other details values
         const detailsValues = iterateHTML(
           result,
-          '.WeatherDetailsListItem--wxData--kK35q'
+          '.WeatherDetailsListItem--wxData--2s6HT'
         );
         // Combine detailsLabels and detailsValues to form an object
         const details = Object.assign(
@@ -97,24 +97,25 @@ const getWeather = async (cityName) => {
         // Todays forecast
         const forecastTime = iterateHTML(
           result,
-          '.Column--label--2s30x .Ellipsis--ellipsis--3ADai'
+          '.Column--label--2s30x .Ellipsis--ellipsis--1sNTm'
         );
-        const forecastTemperature = iterateHTML(
-          result,
-          ".Column--innerWrapper--3ocxD .Column--temp--1sO_J > span[data-testid='TemperatureValue']"
-        );
-        const forecastRain = iterateHTML(
-          result,
-          'span.Column--precip--3JCDO'
-        );
-        // console.log(forecastRain[1].match(/[0-9]+/))
-        const foreCast = Object.assign(
-          ...forecastTime.map((key, i) => ({
-            [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
-              /[0-9]+/
-            ) || 0}%)`,
-          }))
-        );
+        // const forecastTemperature = iterateHTML(
+        //   result,
+        //   ".Column--innerWrapper--3ocxD .Column--temp--5hqI_ > span[data-testid='TemperatureValue']"
+        // );
+        // const forecastRain = iterateHTML(
+        //   result,
+        //   'a.Column--innerWrapper--1vUk1 > .Column--precip--2ck8J > span.Column--precip--2ck8J'
+        // );
+        // console.log("foreCast", forecastRain[3]);
+        // // console.log(forecastRain[1].match(/[0-9]+/))
+        // const foreCast = Object.assign(
+        //   ...forecastTime.map((key, i) => ({
+        //     [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
+        //       /[0-9]+/
+        //     ) || 0}%)`,
+        //   }))
+        // );
 
         return {
           success: true,
@@ -137,11 +138,11 @@ const getWeather = async (cityName) => {
             `<b>UV Index:</b> ${details['UV Index']}\n` +
             `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
             `<b>Last Update:</b> ${lastUpdated}\n\n` +
-            `📅 <b>Today's Forecast</b>\n\n` +
-            `<b>Morning</b>: ${foreCast.Morning}\n` +
-            `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
-            `<b>Evening</b>: ${foreCast.Evening}\n` +
-            `<b>Overnight</b>: ${foreCast.Overnight}\n\n` +
+            // `📅 <b>Today's Forecast</b>\n\n` +
+            // `<b>Morning</b>: ${foreCast.Morning}\n` +
+            // `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
+            // `<b>Evening</b>: ${foreCast.Evening}\n` +
+            // `<b>Overnight</b>: ${foreCast.Overnight}\n\n` +
             `<a href='${bgImage}'>Background</a>\n`
         };
       })
