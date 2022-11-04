@@ -36,38 +36,39 @@ const getWeather = async (cityName) => {
 
     return scrapeData
       .then((result) => {
-        // Grab city, temp, aqi, weather from them HTML
-        const city = result('.CurrentConditions--location--1YWj_').text();
+        /* City name */
+        const city = result('.CurrentConditions--location--kyTeL').text();
 
-        // Weather background image
+        if (!city) throw new Error("City not found");
+
+        /* Weather background image */
         const bgImage = result(".CurrentConditions--CurrentConditions--1swR9 > section").attr("style").match(/\(([^)]+)\)/)[1];
 
-        // Temperature
+        /* Temperature */
         const temp = result('span[data-testid=TemperatureValue]')
           .text()
           .split('°')[0];
-        // Air Quality
-        const aqi = result('text[data-testid="DonutChartValue"]').text();
-        const aqiRemark = result('.AirQualityText--severity--1fu5k').text();
 
-        // Current Weather
+        /* Air Quality */
+        const aqi = result('text[data-testid="DonutChartValue"]').text();
+        const aqiRemark = result('span[data-testid="AirQualityCategory"]').text();
+
+        /* Current Weather */
         const currentWeather = result(
-          '.CurrentConditions--phraseValue--mZC_p'
+          'div[data-testid="wxPhrase"]'
         ).text();
 
-        // Exapected temperature
+        /* Exapected temperature */
         const expectedTemperature = result(
           '.CurrentConditions--tempHiLoValue--3SUHy'
         ).text();
-        let dayNight = expectedTemperature.match(/\d+/g).join('° / ');
 
-        // Last updated
+        /* Last updated */
         const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
           .text()
           .split('As of')
           .join('');
         const hour = Number(lastUpdated.match(/[0-9]+/g)[0]);
-        // console.log("hour:", hour < 5 && hour > 19)
 
         // Insight Data
         const insight_heading = result(
@@ -78,44 +79,45 @@ const getWeather = async (cityName) => {
         // Other details labels
         const detailsLabels = iterateHTML(
           result,
-          '.WeatherDetailsListItem--label--3PkXl'
+          'div[data-testid="WeatherDetailsLabel"]'
         );
 
         // Other details values
         const detailsValues = iterateHTML(
           result,
-          '.WeatherDetailsListItem--wxData--2s6HT'
+          'div[data-testid="wxData"]'
         );
+
         // Combine detailsLabels and detailsValues to form an object
         const details = Object.assign(
           ...detailsLabels.map((key, i) => ({
             [key]: detailsValues[i],
           }))
         );
-        // console.log("Details: ", details);
 
-        // Todays forecast
-        const forecastTime = iterateHTML(
+        /* Todays Forecast */
+        const foreCastTime = ['Morning', 'Afternoon', 'Evening', 'Overnight'];
+
+        // forecast temperatures for Morning, Afternoon, Evening and Overnight
+        const forecastTemperature = iterateHTML(
           result,
-          '.Column--label--2s30x .Ellipsis--ellipsis--1sNTm'
+          'div[data-testid="SegmentHighTemp"] > span[data-testid="TemperatureValue"]'
+        ).splice(0, 4);
+
+        // forecast rain for Morning, Afternoon, Evening and Overnight
+        const forecastRain = iterateHTML(
+          result,
+          'div[data-testid="SegmentPrecipPercentage"] > span'
+        ).splice(0, 4);
+
+        // create a forecast object that will have forecast temp and forecast rain associated with time of the day.
+        const foreCast = Object.assign(
+          ...foreCastTime.map((key, i) => ({
+            [foreCastTime[i]]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
+              /[0-9]+/
+            ) || 0}%)`,
+          }))
         );
-        // const forecastTemperature = iterateHTML(
-        //   result,
-        //   ".Column--innerWrapper--3ocxD .Column--temp--5hqI_ > span[data-testid='TemperatureValue']"
-        // );
-        // const forecastRain = iterateHTML(
-        //   result,
-        //   'a.Column--innerWrapper--1vUk1 > .Column--precip--2ck8J > span.Column--precip--2ck8J'
-        // );
-        // console.log("foreCast", forecastRain[3]);
-        // // console.log(forecastRain[1].match(/[0-9]+/))
-        // const foreCast = Object.assign(
-        //   ...forecastTime.map((key, i) => ({
-        //     [key]: `${forecastTemperature[i]} (☔️ ${forecastRain[i].match(
-        //       /[0-9]+/
-        //     ) || 0}%)`,
-        //   }))
-        // );
 
         return {
           success: true,
@@ -138,11 +140,11 @@ const getWeather = async (cityName) => {
             `<b>UV Index:</b> ${details['UV Index']}\n` +
             `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
             `<b>Last Update:</b> ${lastUpdated}\n\n` +
-            // `📅 <b>Today's Forecast</b>\n\n` +
-            // `<b>Morning</b>: ${foreCast.Morning}\n` +
-            // `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
-            // `<b>Evening</b>: ${foreCast.Evening}\n` +
-            // `<b>Overnight</b>: ${foreCast.Overnight}\n\n` +
+            `📅 <b>Today's Forecast</b>\n\n` +
+            `<b>Morning</b>: ${foreCast.Morning}\n` +
+            `<b>Afternoon</b>: ${foreCast.Afternoon}\n` +
+            `<b>Evening</b>: ${foreCast.Evening}\n` +
+            `<b>Overnight</b>: ${foreCast.Overnight}\n\n` +
             `<a href='${bgImage}'>Background</a>\n`
         };
       })
@@ -150,7 +152,7 @@ const getWeather = async (cityName) => {
         console.log(err.message);
         return {
           success: false,
-          message: 'City not found',
+          message: "City not found",
         };
       });
   } catch (err) {
