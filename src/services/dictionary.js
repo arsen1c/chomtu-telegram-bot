@@ -6,8 +6,7 @@ const formatData = (arr, word, prononce) => {
   arr.forEach((obj) => {
     markdown +=
       `*[${obj.partOfSpeech}]*\n*Definition*: ${obj.definition}\n\n` +
-      `*Snonyms*: ${obj.synonyms || '---'}\n*Examples*: ${
-        obj.example || '---'
+      `*Snonyms*: ${obj.synonyms || '---'}\n*Examples*: ${obj.example || '---'
       }\n\n`;
   });
 
@@ -16,12 +15,13 @@ const formatData = (arr, word, prononce) => {
 
 const whatIs = (word) => {
   const dictionaryData = axios.get(
-    `https://api.dictionaryapi.dev/api/v2/entries/en_GB/${word}`
+    `https://api.dictionaryapi.dev/api/v2/entries/en_US/${word}`
   );
 
   return dictionaryData
     .then(({ data: response }) => {
       const data = response[0];
+      console.log(JSON.stringify(data, null, 2));
       const { meanings } = data;
 
       // Grab the audio link
@@ -30,7 +30,7 @@ const whatIs = (word) => {
 
       // Grab the definitions
       const definitions = [];
-      for (let x = 0; x < meanings.length; x += x + 1) {
+      for (let x = 0; x < meanings.length; x++) {
         const obj = {};
 
         // Extract desired elements from the response
@@ -47,6 +47,7 @@ const whatIs = (word) => {
 
         // Push the object to the array
         definitions.push(obj);
+        console.log("Definitinos:", definitions);
       }
 
       return {

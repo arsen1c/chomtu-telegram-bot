@@ -37,12 +37,12 @@ const getWeather = async (cityName) => {
     return scrapeData
       .then((result) => {
         /* City name */
-        const city = result('.CurrentConditions--location--kyTeL').text();
+        const city = result('.CurrentConditions--location--1YWj_').text();
 
         if (!city) throw new Error("City not found");
 
         /* Weather background image */
-        const bgImage = result(".CurrentConditions--CurrentConditions--1swR9 > section").attr("style").match(/\(([^)]+)\)/)[1];
+        const bgImage = result(".CurrentConditions--CurrentConditions--1XEyg > section").attr("style").match(/\(([^)]+)\)/)[1];
 
         /* Temperature */
         const temp = result('span[data-testid=TemperatureValue]')
@@ -64,7 +64,7 @@ const getWeather = async (cityName) => {
         ).text();
 
         /* Last updated */
-        const lastUpdated = result('.CurrentConditions--timestamp--23dfw')
+        const lastUpdated = result('.CurrentConditions--timestamp--1ybTk')
           .text()
           .split('As of')
           .join('');
