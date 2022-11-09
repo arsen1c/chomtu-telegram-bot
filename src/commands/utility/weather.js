@@ -52,6 +52,7 @@ const getWeather = async (cityName) => {
         /* Air Quality */
         const aqi = result('text[data-testid="DonutChartValue"]').text();
         const aqiRemark = result('span[data-testid="AirQualityCategory"]').text();
+        const aqiDescription = result('p[data-testid="AirQualitySeverity"]').text();
 
         /* Current Weather */
         const currentWeather = result(
@@ -138,7 +139,8 @@ const getWeather = async (cityName) => {
             `💧 <b>Humidity:</b> ${details.Humidity}\n` +
             `👁 <b>Visibility:</b> ${details.Visibility}\n\n` +
             `<b>UV Index:</b> ${details['UV Index']}\n` +
-            `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n\n` +
+            `<b>Air Quality:</b> ${aqi} (${aqiRemark})\n` +
+            `${aqiDescription && `<b><em>(${aqiDescription})</em></b>\n\n`}` +
             `<b>Last Update:</b> ${lastUpdated}\n\n` +
             `📅 <b>Today's Forecast</b>\n\n` +
             `<b>Morning</b>: ${foreCast.Morning}\n` +
