@@ -61,7 +61,7 @@ const getWeather = async (cityName) => {
 
         /* Exapected temperature */
         const expectedTemperature = result(
-          '.CurrentConditions--tempHiLoValue--3SUHy'
+          '.CurrentConditions--tempHiLoValue--3T1DG'
         ).text();
 
         /* Last updated */
