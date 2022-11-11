@@ -73,7 +73,7 @@ const getWeather = async (cityName) => {
 
         // Insight Data
         const insight_heading = result(
-          '.InsightNotification--headline--1hVMc'
+          '.InsightNotification--headline--35QdL'
         ).text();
         const insight_desc = result('.InsightNotification--text--UxsQt').text();
 
