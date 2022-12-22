@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchHTML } from '../helpers';
+import { fetchHTML, iterateHTML } from '../helpers';
 
 const capitalizeFirstLetter = (string) =>
   string.charAt(0).toUpperCase() + string.slice(1);
@@ -17,18 +17,10 @@ const getCovidData = async (country) => {
       const flagURL = `https://www.worldometers.info${result('div > img').attr(
         'src'
       )}`;
-      // Data [Array]: Cases / Deaths / Recovered
-      // eslint-disable-next-line no-shadow
-      const data = result('#maincounter-wrap > .maincounter-number')
-        .text()
-        .trim()
-        .split('\n\n');
-      // Updates: A sentence
-      // const update = result(".news_li").text().split("[source]")[0].trim();
-      const update = result('.news_li').text().split('in')[0].trim();
-      // console.log(result('.label-counter').text().split('/')[2].trim())
 
-      // Trying to dates
+      // Data [Array]: Cases / Deaths / Recovered
+      const data = iterateHTML(result, "#maincounter-wrap > .maincounter-number > span");
+      const update = result('.news_li').text().split('in')[0].trim();
       const date = result('div.news_date > h4').text();
 
       // Return the Data in JSON form
@@ -58,23 +50,25 @@ const covid = async (country) => {
   if (result.status) {
     return {
       markdown:
-        `🦠 *Covid:\t ${result.data.countryName}*\n\n` +
-        `*Total Cases:*\t ${result.data.data[0]}\n` +
-        `*Total Deaths:*\t ${result.data.data[1]}\n` +
-        `*Total Recovered:*\t ${result.data.data[2]}\n\n` +
-        `*Updates:*\n${result.data.update}\n\n` +
-        `*Last updated:*\n${result.data.lastUpdated}\n\n` +
-        `[Flag](${result.data.flag})`,
+        `🦠 <b>Covid:\t ${result.data.countryName}</b>\n\n` +
+        `<b>Total Cases:</b>\t ${result.data.data[0]}\n` +
+        `<b>Total Deaths:</b>\t ${result.data.data[1]}\n` +
+        `<b>Total Recovered:</b>\t ${result.data.data[2]}\n\n` +
+        `<b>Updates:</b>\n${result.data.update}\n\n` +
+        `<b>Last updated:</b>\n${result.data.lastUpdated}\n\n` +
+        `<a href='${result.data.flag}'>Flag</a>`,
+      url: `https://www.worldometers.info/coronavirus/country/${country}`
     };
   }
 
   return {
+    status: "fail",
     markdown: `${result.message}`,
   };
 };
 
 // get Data for India
-const covidIn = (query) => {
+const covidIn = async (query) => {
   const data = axios.get(
     'https://api.covid19india.org/state_district_wise.json'
   );
@@ -105,7 +99,6 @@ const covidIn = (query) => {
       return { status: 'fail', markdown: 'District not found' };
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
       console.log(err);
       return { status: 'fail', markdown: err.message };
     });

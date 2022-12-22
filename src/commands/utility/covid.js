@@ -13,6 +13,15 @@ module.exports = {
   chatAction: 'typing',
   async execute(ctx, country) {
     const result = await covidService.covid(country.join('-'));
-    ctx.replyWithMarkdown(result.markdown);
+    if (result.status === 'fail') {
+      ctx.replyWithMarkdown(result.markdown);
+    } else {
+      await ctx.telegram.sendMessage(ctx.chat.id, result.markdown, {
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [[{ text: 'More on Worldometers', url: result.url }]],
+        },
+      });
+    }
   },
 };
