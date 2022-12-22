@@ -13,7 +13,7 @@ const formatData = (arr, word, prononce) => {
   return markdown;
 };
 
-const whatIs = (word) => {
+const whatIs = async (word) => {
   const dictionaryData = axios.get(
     `https://api.dictionaryapi.dev/api/v2/entries/en_US/${word}`
   );
@@ -21,7 +21,6 @@ const whatIs = (word) => {
   return dictionaryData
     .then(({ data: response }) => {
       const data = response[0];
-      console.log(JSON.stringify(data, null, 2));
       const { meanings } = data;
 
       // Grab the audio link
