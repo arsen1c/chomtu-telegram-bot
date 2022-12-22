@@ -46,7 +46,6 @@ const whatIs = async (word) => {
 
         // Push the object to the array
         definitions.push(obj);
-        console.log("Definitinos:", definitions);
       }
 
       return {
