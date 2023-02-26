@@ -74,17 +74,16 @@ module.exports = {
           const url = `https://www.screener.in/api/company/search/?q=${stock.join(
             '+'
           )}&v=2`;
-          let suggestions = '*Did you mean...*\n\n';
+          let suggestions = '⚠️ *Multiple stocks found, please try again with a codename from the following list: *\n\n';
 
           const data = axios.get(url);
           data
             .then((res) => {
               let list = [...res.data];
-              list.forEach((company) => {
+              list.forEach((company, index) => {
                 // Match Allcaps words or text&text form
                 suggestions += String(
-                  `*${company.url.match(/[A-Z].+[A-Z]|[A-Z]+/g)[0]}* - ${
-                    company.name
+                  `*${index + 1}. ${company.url.match(/[A-Z].+[A-Z]|[A-Z]+/g)[0]}* - ${company.name
                   }\n\n`
                 );
               });
