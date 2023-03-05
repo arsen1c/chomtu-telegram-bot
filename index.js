@@ -27,12 +27,17 @@ for (const folder of commandFolders) {
 bot.on('message', (ctx) => {
   if (!ctx.message.text || !ctx.message.text.startsWith('/')) return;
 
-  const commandText = ctx.message.text.match(/\/[a-z]*/)[0];
+  // grab the command name
+  const commandName = ctx.message.text.match(/\/[a-zA-Z]+/)[0].toLowerCase().substr(1);
 
-  if (!collection.has(commandText.substr(1))) return;
+  // look for the command name in the collection map
+  if (!collection.has(commandName)) return;
 
-  let [commandName, ...args] = ctx.message.text.split(' ');
-  const command = collection.get(commandName.substr(1));
+  // get the arguments passed 
+  let [_, ...args] = ctx.message.text.split(' ');
+  // grab the command object
+  const command = collection.get(commandName);
+
   if (!command) return;
 
   if (command.args && !args.length) {
