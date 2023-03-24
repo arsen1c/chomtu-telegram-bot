@@ -12,6 +12,7 @@
   "author": "arsen1c",
   "license": "MIT",
   "dependencies": {
+    "@vitalets/google-translate-api": "^9.1.0",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^8.2.0",
