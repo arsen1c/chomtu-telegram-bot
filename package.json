@@ -18,8 +18,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "telegraf": "^4.0.3",
-    "urban-dictionary": "^3.0.2"
+    "telegraf": "^4.0.3"
   },
   "devDependencies": {
     "husky": "^8.0.1",
