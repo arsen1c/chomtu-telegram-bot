@@ -37,12 +37,12 @@ const getWeather = async (cityName) => {
     return scrapeData
       .then((result) => {
         /* City name */
-        const city = result('.CurrentConditions--location--1YWj_').text();
+        const city = result('.CurrentConditions--location--yub4l').text();
 
         if (!city) throw new Error("City not found");
 
         /* Weather background image */
-        const bgImage = result(".CurrentConditions--CurrentConditions--1XEyg > section").attr("style").match(/\(([^)]+)\)/)[1];
+        const bgImage = result(".CurrentConditions--CurrentConditions--4Lqax > section").attr("style").match(/\(([^)]+)\)/)[1];
 
         /* Temperature */
         const temp = result('span[data-testid=TemperatureValue]')
@@ -61,11 +61,11 @@ const getWeather = async (cityName) => {
 
         /* Exapected temperature */
         const expectedTemperature = result(
-          '.CurrentConditions--tempHiLoValue--3T1DG'
+          '.CurrentConditions--tempHiLoValue--Og9IG'
         ).text();
 
         /* Last updated */
-        const lastUpdated = result('.CurrentConditions--timestamp--1ybTk')
+        const lastUpdated = result('.CurrentConditions--timestamp--LqnOd')
           .text()
           .split('As of')
           .join('');
@@ -73,9 +73,9 @@ const getWeather = async (cityName) => {
 
         // Insight Data
         const insight_heading = result(
-          '.InsightNotification--headline--3gJfC'
+          '.InsightNotification--headline--xQ4GM'
         ).text();
-        const insight_desc = result('.InsightNotification--text--35QdL').text();
+        const insight_desc = result('.InsightNotification--text--wOZxZ').text();
 
         // Other details labels
         const detailsLabels = iterateHTML(
