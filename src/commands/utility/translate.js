@@ -1,6 +1,6 @@
 import { translate } from "@vitalets/google-translate-api"
 
-module.exports = {
+export default {
     name: 'translate',
     description: 'Translation from one language to another. Flags are optional, default language of translation is english.',
     usage: '-hi -en नमस्ते OR /translate नमस्ते',

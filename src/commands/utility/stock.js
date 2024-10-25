@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { iterateHTML, fetchHTML } from '../../helpers';
+import { iterateHTML, fetchHTML } from '../../helpers/index.js';
 
-module.exports = {
+export default {
   name: 'stock',
   description: 'Get data about a specific stock(India Only)',
   usage: '<stock-name>',

@@ -1,6 +1,6 @@
-import ddg from '../../services/ddg';
+import ddg from '../../services/ddg.js';
 
-module.exports = {
+export default {
   name: 'ddg',
   description: 'Get search results from DuckDuckGo',
   usage: '<query-to-search>',
@@ -16,7 +16,7 @@ module.exports = {
       await ctx.replyWithMarkdown(
         `
         The result is too long to display. Please visit this search query link manually\n\n` +
-          `https://duckduckgo.com/?q=${query.join('%20')}`
+        `https://duckduckgo.com/?q=${query.join('%20')}`
       );
     }
   },

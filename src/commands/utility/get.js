@@ -1,10 +1,10 @@
-import { iterateLINKS, fetchDDGHTML } from '../../helpers';
 import axios from 'axios';
-import userAgents from '../../helpers/user-agents.json';
+import userAgents from '../../helpers/user-agents.js';
+import { fetchDDGHTML } from '../../helpers/index.js';
 
 const randomNumber = (max) => Math.floor(Math.random() * max);
 
-module.exports = {
+export default {
   name: 'get',
   description: 'Search for images across the web',
   args: true,

@@ -1,6 +1,6 @@
-import dictionary from '../../services/dictionary';
+import dictionary from '../../services/dictionary.js';
 
-module.exports = {
+export default {
   name: 'whatis',
   description: 'Get meaning of a word from oxford dictionary',
   usage: '<word>',
