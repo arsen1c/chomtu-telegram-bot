@@ -1,6 +1,6 @@
-import randomAnimals from '../../services/getAnimals';
+import randomAnimals from '../../services/getAnimals.js';
 
-module.exports = {
+export default {
   name: 'cat',
   description: 'Random cats',
   args: false,

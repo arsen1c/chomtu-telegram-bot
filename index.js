@@ -1,28 +1,34 @@
 import express from 'express';
-import { BRAD_API, BOT_API } from './src/config';
-const { Telegraf } = require('telegraf');
+import { BRAD_API, BOT_API } from './src/config/index.js';
+import { Telegraf } from 'telegraf';
+import fs from "node:fs"
 
 const BOT_TOKEN = process.env.NODE_ENV === 'production' ? BOT_API : BRAD_API;
 const bot = new Telegraf(BOT_TOKEN);
-const fs = require('fs');
 const app = express();
 
+console.log({ BOT_TOKEN })
 // Grab all command folder in ./commands
 const commandFolders = fs.readdirSync('./src/commands');
-
+console.log({ commandFolders })
 const collection = new Map();
 
-// Get all the commands and put them in collection map
-for (const folder of commandFolders) {
-  // Get files from each command folder
-  const commandFiles = fs
-    .readdirSync(`./src/commands/${folder}`)
-    .filter((file) => file.endsWith('.js'));
-  for (const file of commandFiles) {
-    const command = require(`./src/commands/${folder}/${file}`);
-    collection.set(command.name, command);
+async function seedCommands() {
+  // Get all the commands and put them in collection map
+  for (const folder of commandFolders) {
+    // Get files from each command folder
+    const commandFiles = fs
+      .readdirSync(`./src/commands/${folder}`)
+      .filter((file) => file.endsWith('.js'));
+    for (const file of commandFiles) {
+      const { default: command } = await import(`./src/commands/${folder}/${file}`);
+      collection.set(command.name, command);
+    }
   }
 }
+
+seedCommands()
+
 
 bot.on('message', (ctx) => {
   if (!ctx.message.text || !ctx.message.text.startsWith('/')) return;

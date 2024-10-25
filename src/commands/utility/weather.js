@@ -1,4 +1,4 @@
-import { fetchHTML, iterateHTML, getCityCords } from '../../helpers';
+import { fetchHTML, iterateHTML, getCityCords } from '../../helpers/index.js';
 
 const getCurrentWeatherEmoji = (remark) => {
   const options = {
@@ -166,7 +166,7 @@ const getWeather = async (cityName) => {
   }
 };
 
-module.exports = {
+export default {
   name: 'weather',
   description: 'Check weather of a city',
   args: true,

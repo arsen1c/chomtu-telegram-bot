@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchHTML, iterateHTML } from '../helpers';
+import { fetchHTML, iterateHTML } from '../helpers/index.js';
 
 const capitalizeFirstLetter = (string) =>
   string.charAt(0).toUpperCase() + string.slice(1);

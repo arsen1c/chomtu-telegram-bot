@@ -1,9 +1,9 @@
 // API docs: https://docs.jdoodle.com/compiler-api/compiler-api#what-are-the-output-parameters-for-credit-spent-api-call-when-the-execution-failed
 
 import axios from 'axios';
-import { JClientID, JClientSecret } from '../../config';
+import { JClientID, JClientSecret } from '../../config/index.js';
 
-module.exports = {
+export default {
   name: 'node',
   description:
     'Executes Nodejs/Javascript\n\nWRANING: Dont use String templates',
@@ -35,8 +35,8 @@ module.exports = {
 
         ctx.replyWithMarkdown(
           `*Output:*\n${output}` +
-            `\n\n*Memory:* ${memory}` +
-            `\n*Cpu Time:* ${cpuTime}`
+          `\n\n*Memory:* ${memory}` +
+          `\n*Cpu Time:* ${cpuTime}`
         );
       })
       .catch((e) => {

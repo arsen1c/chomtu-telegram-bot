@@ -1,26 +1,28 @@
 {
-  "name": "ChomtuBot",
+  "name": "chomtu_bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production node -r esm index.js",
-    "dev": "NODE_ENV=development nodemon -r esm index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon  index.js",
     "format": "prettier --write src/"
   },
   "keywords": [],
   "author": "arsen1c",
   "license": "MIT",
   "dependencies": {
-    "@vitalets/google-translate-api": "^9.1.0",
+    "@vitalets/google-translate-api": "^9.2.0",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.4.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "telegraf": "^4.0.3"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.3",
     "husky": "^8.0.1",
     "nodemon": "^2.0.7",
     "prettier": "^2.7.1",

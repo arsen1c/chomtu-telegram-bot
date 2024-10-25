@@ -1,6 +1,6 @@
-import { fetchHTML } from '../../helpers';
+import { fetchHTML } from '../../helpers/index.js';
 
-module.exports = {
+export default {
   name: 'wiki',
   description: 'Get information from wikipedia',
   usage: '<query>',
@@ -24,10 +24,10 @@ module.exports = {
 
           ctx.replyWithMarkdown(
             `*🌏 Wikipedia*\n\n` +
-              `*Query:* ${query.join(' ')}\n\n` +
-              `*Short Desc:* ${shortDesc}\n\n` +
-              `*Main Desc:*\n${output[0]}\n\n` +
-              `[Open Wikipedia](${baseURL})`
+            `*Query:* ${query.join(' ')}\n\n` +
+            `*Short Desc:* ${shortDesc}\n\n` +
+            `*Main Desc:*\n${output[0]}\n\n` +
+            `[Open Wikipedia](${baseURL})`
           );
         })
         .catch((err) => {

@@ -1,4 +1,4 @@
-import { fetchHTML, iterateLINKS, iterateHTML, iterateLINKSAndText, iterateHTMLText } from '../helpers/index';
+import { fetchHTML, iterateLINKS, iterateHTML, iterateLINKSAndText, iterateHTMLText } from '../helpers/index.js';
 
 const flags = new Map([['none', 0], ['audio', 100], ['video', 200], ['app', 300], ['game', 400], ['nsfw', 500]]);
 

@@ -1,6 +1,6 @@
-import fetchGeniusLyrics from "../../services/lyrics"
+import fetchGeniusLyrics from "../../services/lyrics.js"
 
-module.exports = {
+export default {
     name: 'lyrics',
     description: 'Get lyrics of a song',
     usage: '<song-name>',

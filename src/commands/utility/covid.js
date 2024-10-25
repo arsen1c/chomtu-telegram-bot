@@ -1,10 +1,10 @@
-import covidService from '../../services/covidService';
+import covidService from '../../services/covidService.js';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-module.exports = {
+export default {
   name: 'covid',
   description: 'Get covid data of a specific country',
   usage: '<country-name>',

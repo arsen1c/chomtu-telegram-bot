@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchHTML } from "../helpers"
+import { fetchHTML } from "../helpers/index.js"
 
 const JOINS = {
     suggestions: "+",
