@@ -61,16 +61,21 @@ const iterateLINKSAndText = (result, element, attrName = 'href') => {
   return arr;
 };
 
-const getCityCords = (cityName) =>
-  axios
-    .get(
-      `http://api.mapbox.com/geocoding/v5/mapbox.places/${cityName}.json?access_token=${MAPBOX_KEY}`
-    )
-    .then((result) => {
-      const cords = result.data.features[0].center.reverse();
-      const newCord = [...cords.map((cord) => cord.toFixed(3).slice(0, -1))];
-      return newCord.join();
-    })
-    .catch((err) => console.log(err.message));
+const getCityCords = async (cityName) => {
+  try {
+    const result = await axios.get(
+      `http://api.mapbox.com/geocoding/v5/mapbox.places/${cityName}.json?access_token=${config.MAPBOXKEY}`
+    );
+    const cords = result.data.features[0].center.reverse();
+    const newCord = [...cords.map((cord) => cord.toFixed(3).slice(0, -1))];
+    return {
+      cords: newCord.join(),
+      placeName: result.data.features[0].place_name,
+    };
+  } catch (err) {
+    console.log(err.message);
+    throw new Error(err.message || 'Failed to get city coordinates');
+  }
+};
 
 export { iterateHTML, fetchHTML, iterateLINKS, getCityCords, fetchDDGHTML, iterateLINKSAndText, iterateHTMLText };

@@ -29,7 +29,7 @@ const getCurrentWeatherEmoji = (remark) => {
 
 const getWeather = async (cityName) => {
   try {
-    const cityCords = await getCityCords(cityName);
+    const { cords: cityCords, placeName } = await getCityCords(cityName);
     const baseURL = `https://weather.com/en-IN/weather/today/${cityCords}?&temp=c`;
 
     const scrapeData = fetchHTML(baseURL);
@@ -37,7 +37,7 @@ const getWeather = async (cityName) => {
     return scrapeData
       .then((result) => {
         /* City name */
-        const city = result('.CurrentConditions--location--yub4l').text();
+        const city = placeName
 
         if (!city) throw new Error("City not found");
 
